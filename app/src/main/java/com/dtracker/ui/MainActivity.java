@@ -1,13 +1,22 @@
 package com.dtracker.ui;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 
 import com.dtracker.DTrackerApp;
 import com.dtracker.R;
 import com.dtracker.ui.base.BaseTrackingServiceActivity;
+import com.dtracker.ui.dialog.ConfirmationDialogFragment;
+
+import butterknife.OnClick;
 
 public class MainActivity extends BaseTrackingServiceActivity {
+
+    private static final int LOCATION_PERMISSION_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,4 +35,40 @@ public class MainActivity extends BaseTrackingServiceActivity {
         return R.layout.activity_main;
     }
 
+    @OnClick(R.id.activity_main_bt_tracking)
+    void onTrackingClick() {
+        checkLocationPermission();
+        if (trackingService.isTracking()) {
+            trackingService.stopTracking();
+        } else {
+            ConfirmationDialogFragment.showDialog(getSupportFragmentManager(), R.string.start_tracking, R.string.start_tracking_warning, new ConfirmationDialogFragment.OnConfirmListener() {
+                @Override
+                public void onClick() {
+                    trackingService.startTracking();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            switch (requestCode) {
+                case LOCATION_PERMISSION_CODE: {
+                    trackingService.startTracking();
+                    break;
+                }
+            }
+        }
+    }
+
+    private boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_CODE);
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

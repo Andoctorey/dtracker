@@ -2,6 +2,7 @@ package com.dtracker;
 
 import android.app.Application;
 import android.content.Context;
+import android.location.LocationManager;
 
 import com.dtracker.core.dagger.PerApp;
 
@@ -32,5 +33,11 @@ public class DTrackerModule {
     @PerApp
     Application provideApplication(DTrackerApp app) {
         return app;
+    }
+
+    @Provides
+    @PerApp
+    LocationManager provideLocationManager(final Context context) {
+        return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 }
