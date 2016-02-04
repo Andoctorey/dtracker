@@ -30,7 +30,7 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
     }
 
     @Override
