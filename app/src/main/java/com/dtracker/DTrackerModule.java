@@ -2,12 +2,16 @@ package com.dtracker;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Geocoder;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 
 import com.dtracker.core.bus.AndroidBus;
 import com.dtracker.core.dagger.PerApp;
 import com.dtracker.core.jobs.TimberJobQueueLogger;
+import com.dtracker.core.store.PrefsDataStore;
+import com.dtracker.core.store.impl.PrefsDataStoreImpl;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.squareup.otto.Bus;
@@ -69,5 +73,17 @@ public class DTrackerModule {
     @PerApp
     Geocoder provideApiFactory(Context context) {
         return new Geocoder(context, Locale.getDefault());
+    }
+
+    @Provides
+    @PerApp
+    SharedPreferences provideDefaultSharedPreferences(final Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    @Provides
+    @PerApp
+    PrefsDataStore providePrefsDataStore(PrefsDataStoreImpl store) {
+        return store;
     }
 }

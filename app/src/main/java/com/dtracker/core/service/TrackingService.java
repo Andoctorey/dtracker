@@ -1,6 +1,7 @@
 package com.dtracker.core.service;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 
 import com.dtracker.DTrackerApp;
+import com.dtracker.core.store.PrefsDataStore;
 import com.dtracker.ui.base.BaseService;
 
 import java.util.ArrayList;
@@ -37,10 +39,17 @@ public class TrackingService extends BaseService implements LocationListener {
     @Inject
     LocationManager locationManager;
 
+    @Inject
+    PrefsDataStore prefsDataStore;
+
     private Location prevLocation;
     private float distance;
     private boolean isTracking;
     private List<OnTrackingListener> trackingListeners = new ArrayList<>();
+
+    public static void start(Context context) {
+        context.startService(new Intent(context, TrackingService.class));
+    }
 
     @Override
     protected void inject() {
@@ -62,13 +71,16 @@ public class TrackingService extends BaseService implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.i("onStartCommand");
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         Timber.i("onCreate");
+        if (prefsDataStore.isTrackingEnable()){
+            distance=prefsDataStore.getDistance();
+        }
     }
 
     @Override
@@ -80,6 +92,7 @@ public class TrackingService extends BaseService implements LocationListener {
     public void startTracking() {
         Timber.i("startTracking");
         isTracking = true;
+        prefsDataStore.setTrackingEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -98,6 +111,7 @@ public class TrackingService extends BaseService implements LocationListener {
     public void stopTracking() {
         Timber.i("stopTracking");
         isTracking = false;
+        prefsDataStore.setTrackingEnabled(false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -110,6 +124,7 @@ public class TrackingService extends BaseService implements LocationListener {
         Timber.i("onLocationChanged "+location.toString());
         if (prevLocation!=null){
             distance+=location.distanceTo(prevLocation);
+            prefsDataStore.setDistance(distance);
             Timber.i("distance "+distance);
             if (trackingListeners!=null&&trackingListeners.size()>0){
                 for (OnTrackingListener trackingListener : trackingListeners) {
