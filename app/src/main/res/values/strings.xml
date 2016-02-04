@@ -5,4 +5,5 @@
     <string name="show_distance">Show distance</string>
     <string name="show_location">Show location</string>
     <string name="start_tracking_warning">Do you agree if your location will be tracked in background?</string>
+    <string name="stop_tracking">Stop Tracking</string>
 </resources>

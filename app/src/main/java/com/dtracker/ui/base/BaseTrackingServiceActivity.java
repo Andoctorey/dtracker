@@ -13,6 +13,8 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
     protected boolean boundToTrackingService;
     protected TrackingService trackingService;
 
+    protected abstract TrackingService.OnTrackingListener getOnTrackingListener();
+
     @Override
     public void onStart() {
         super.onStart();
@@ -25,6 +27,7 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
         super.onStop();
         if (boundToTrackingService) {
             unbindService(connection);
+            trackingService.removeOnTrackingListener(getOnTrackingListener());
             boundToTrackingService = false;
         }
     }
@@ -35,6 +38,7 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             TrackingService.LocalBinder binder = (TrackingService.LocalBinder) service;
             trackingService = binder.getService();
+            trackingService.addOnTrackingListener(getOnTrackingListener());
             boundToTrackingService = true;
         }
 

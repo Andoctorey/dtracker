@@ -5,18 +5,24 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 
 import com.dtracker.DTrackerApp;
 import com.dtracker.R;
+import com.dtracker.core.service.TrackingService;
 import com.dtracker.ui.base.BaseTrackingServiceActivity;
 import com.dtracker.ui.dialog.ConfirmationDialogFragment;
 
+import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseTrackingServiceActivity {
+public class MainActivity extends BaseTrackingServiceActivity implements TrackingService.OnTrackingListener {
 
     private static final int LOCATION_PERMISSION_CODE = 101;
+
+    @InjectView(R.id.activity_main_bt_tracking)
+    AppCompatButton btTracking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,11 @@ public class MainActivity extends BaseTrackingServiceActivity {
     @Override
     protected int setContentView() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    protected TrackingService.OnTrackingListener getOnTrackingListener() {
+        return this;
     }
 
     @OnClick(R.id.activity_main_bt_tracking)
@@ -70,5 +81,10 @@ public class MainActivity extends BaseTrackingServiceActivity {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void onTrackingStatusChanged(boolean isTracking) {
+        btTracking.setText(isTracking?R.string.stop_tracking:R.string.start_tracking);
     }
 }

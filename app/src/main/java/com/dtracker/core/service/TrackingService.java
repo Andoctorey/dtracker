@@ -36,7 +36,7 @@ public class TrackingService extends BaseService implements LocationListener {
     private Location prevLocation;
     private float distance;
     private boolean isTracking;
-    private List<OnTrackingListener> onTrackingListeners = new ArrayList<>();
+    private List<OnTrackingListener> trackingListeners = new ArrayList<>();
 
     @Override
     protected void inject() {
@@ -80,6 +80,15 @@ public class TrackingService extends BaseService implements LocationListener {
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_MS, MIN_DISTANCE_M, this);
+        onTrackingStatusChanged(true);
+    }
+
+    private void onTrackingStatusChanged(boolean enabled) {
+        if (trackingListeners!=null&&trackingListeners.size()>0){
+            for (OnTrackingListener trackingListener : trackingListeners) {
+                trackingListener.onTrackingStatusChanged(enabled);
+            }
+        }
     }
 
     public void stopTracking() {
@@ -89,6 +98,7 @@ public class TrackingService extends BaseService implements LocationListener {
             return;
         }
         locationManager.removeUpdates(this);
+        onTrackingStatusChanged(false);
     }
 
     @Override
@@ -123,10 +133,10 @@ public class TrackingService extends BaseService implements LocationListener {
 
 
     public void addOnTrackingListener(OnTrackingListener onTrackingListener) {
-        onTrackingListeners.add(onTrackingListener);
+        trackingListeners.add(onTrackingListener);
     }
 
     public void removeOnTrackingListener(OnTrackingListener onTrackingListener) {
-        onTrackingListeners.remove(onTrackingListener);
+        trackingListeners.remove(onTrackingListener);
     }
 }
