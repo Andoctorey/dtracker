@@ -24,7 +24,9 @@ import timber.log.Timber;
 public class TrackingService extends BaseService implements LocationListener {
 
     public interface OnTrackingListener {
-        void onTrackingStatusChanged(boolean isTracking);
+        void onTrackingStatusChanged(boolean isTracking );
+
+        void onDistanceChange(float distance);
     }
 
     private static final long MIN_TIME_MS = 10000;
@@ -107,6 +109,11 @@ public class TrackingService extends BaseService implements LocationListener {
         if (prevLocation!=null){
             distance+=location.distanceTo(prevLocation);
             Timber.i("distance "+distance);
+            if (trackingListeners!=null&&trackingListeners.size()>0){
+                for (OnTrackingListener trackingListener : trackingListeners) {
+                    trackingListener.onDistanceChange(distance);
+                }
+            }
         }
         prevLocation=location;
 
@@ -138,5 +145,9 @@ public class TrackingService extends BaseService implements LocationListener {
 
     public void removeOnTrackingListener(OnTrackingListener onTrackingListener) {
         trackingListeners.remove(onTrackingListener);
+    }
+
+    public float getDistance() {
+        return distance;
     }
 }

@@ -21,13 +21,15 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
 
     private static final int LOCATION_PERMISSION_CODE = 101;
 
+    @InjectView(R.id.activity_main_toolbar)
+    Toolbar toolbar;
+
     @InjectView(R.id.activity_main_bt_tracking)
     AppCompatButton btTracking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
     }
 
@@ -61,6 +63,11 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
         }
     }
 
+    @OnClick(R.id.activity_main_bt_show_distance)
+    void onShowDistanceClick() {
+        DistanceActivity.start(this);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -86,5 +93,10 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
     @Override
     public void onTrackingStatusChanged(boolean isTracking) {
         btTracking.setText(isTracking?R.string.stop_tracking:R.string.start_tracking);
+    }
+
+    @Override
+    public void onDistanceChange(float distance) {
+
     }
 }
