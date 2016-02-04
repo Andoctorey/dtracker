@@ -1,8 +1,10 @@
-package com.dtracker;
+package com.dtracker.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.dtracker.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,4 +15,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
     }
+
+
 }
