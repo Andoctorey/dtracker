@@ -32,7 +32,7 @@
 
         <activity
             android:name=".ui.LocationActivity"
-            android:label="@string/distance"
+            android:label="@string/location"
             android:screenOrientation="portrait"/>
 
         <service

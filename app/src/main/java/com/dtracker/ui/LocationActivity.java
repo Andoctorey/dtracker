@@ -72,13 +72,15 @@ public class LocationActivity extends BaseTrackingServiceActivity implements Tra
 
     @Override
     public void onLocationChanged(Location location) {
-        jobManager.addJob(getLocationJob.init(location));
+        if (location != null) {
+            jobManager.addJob(getLocationJob.init(location));
+        }
     }
 
     @Subscribe
     public void onGetLocationEvent(OnGetLocationEvent event) {
         if (event.location != null) {
-           tvLocation.setText(event.location);
+            tvLocation.setText(event.location);
         }
     }
 

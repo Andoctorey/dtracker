@@ -155,4 +155,9 @@ public class TrackingService extends BaseService implements LocationListener {
     public float getDistance() {
         return distance;
     }
+
+    public Location getLocation() {
+        return prevLocation;
+    }
 }
+

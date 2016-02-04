@@ -14,8 +14,6 @@ import com.squareup.otto.Bus;
 
 import java.util.Locale;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -68,7 +66,7 @@ public class DTrackerModule {
     }
 
     @Provides
-    @Singleton
+    @PerApp
     Geocoder provideApiFactory(Context context) {
         return new Geocoder(context, Locale.getDefault());
     }

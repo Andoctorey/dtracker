@@ -21,6 +21,7 @@ public class GetLocationJob extends Job {
 
     private  Location location;
 
+    @Inject
     public GetLocationJob() {
         super(new Params(0));
     }

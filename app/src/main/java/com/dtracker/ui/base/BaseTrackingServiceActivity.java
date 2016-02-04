@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.widget.Toast;
 
-import com.dtracker.R;
 import com.dtracker.core.service.TrackingService;
 import com.squareup.otto.Bus;
 
@@ -51,6 +49,7 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
             trackingService.addOnTrackingListener(getOnTrackingListener());
             getOnTrackingListener().onDistanceChange(trackingService.getDistance());
             getOnTrackingListener().onTrackingStatusChanged(trackingService.isTracking());
+            getOnTrackingListener().onLocationChanged(trackingService.getLocation());
             boundToTrackingService = true;
         }
 
@@ -59,12 +58,4 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
             boundToTrackingService = false;
         }
     };
-
-    protected void handleMessage(String message, boolean hasError) {
-        if (message != null) {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        } else if (hasError) {
-            Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
-        }
-    }
 }
