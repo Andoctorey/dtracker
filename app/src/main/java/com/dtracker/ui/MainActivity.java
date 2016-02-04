@@ -2,6 +2,7 @@ package com.dtracker.ui;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -68,6 +69,11 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
         DistanceActivity.start(this);
     }
 
+    @OnClick(R.id.activity_main_bt_show_location)
+    void onShowLocationClick() {
+        LocationActivity.start(this);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -97,6 +103,11 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
 
     @Override
     public void onDistanceChange(float distance) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 }

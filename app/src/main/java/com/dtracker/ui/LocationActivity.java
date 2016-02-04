@@ -10,21 +10,33 @@ import android.widget.TextView;
 
 import com.dtracker.DTrackerApp;
 import com.dtracker.R;
+import com.dtracker.core.jobs.GetLocationJob;
+import com.dtracker.core.jobs.OnGetLocationEvent;
 import com.dtracker.core.service.TrackingService;
 import com.dtracker.ui.base.BaseTrackingServiceActivity;
+import com.path.android.jobqueue.JobManager;
+import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 
-public class DistanceActivity extends BaseTrackingServiceActivity implements TrackingService.OnTrackingListener {
+public class LocationActivity extends BaseTrackingServiceActivity implements TrackingService.OnTrackingListener {
 
-    @InjectView(R.id.activity_distance_toolbar)
+    @InjectView(R.id.activity_location_toolbar)
     Toolbar toolbar;
 
-    @InjectView(R.id.activity_distance_tv_distance)
-    TextView tvDistance;
+    @InjectView(R.id.activity_location_tv_location)
+    TextView tvLocation;
+
+    @Inject
+    JobManager jobManager;
+
+    @Inject
+    GetLocationJob getLocationJob;
 
     public static void start(Context context) {
-        context.startActivity(new Intent(context, DistanceActivity.class));
+        context.startActivity(new Intent(context, LocationActivity.class));
     }
 
     @Override
@@ -41,7 +53,7 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
 
     @Override
     protected int setContentView() {
-        return R.layout.activity_distance;
+        return R.layout.activity_location;
     }
 
     @Override
@@ -55,13 +67,19 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
     }
 
     @Override
-    public void onDistanceChange(float distance) {
-        tvDistance.setText(String.valueOf(distance));
+    public void onDistanceChange(float location) {
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        jobManager.addJob(getLocationJob.init(location));
+    }
 
+    @Subscribe
+    public void onGetLocationEvent(OnGetLocationEvent event) {
+        if (event.location != null) {
+           tvLocation.setText(event.location);
+        }
     }
 
     @Override

@@ -5,8 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.widget.Toast;
 
+import com.dtracker.R;
 import com.dtracker.core.service.TrackingService;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 public abstract class BaseTrackingServiceActivity extends BaseActivity {
 
@@ -15,9 +20,13 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
 
     protected abstract TrackingService.OnTrackingListener getOnTrackingListener();
 
+    @Inject
+    Bus bus;
+
     @Override
     public void onStart() {
         super.onStart();
+        bus.register(this);
         Intent intent = new Intent(this, TrackingService.class);
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
@@ -25,6 +34,7 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
     @Override
     public void onStop() {
         super.onStop();
+        bus.unregister(this);
         if (boundToTrackingService) {
             unbindService(connection);
             trackingService.removeOnTrackingListener(getOnTrackingListener());
@@ -49,4 +59,12 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
             boundToTrackingService = false;
         }
     };
+
+    protected void handleMessage(String message, boolean hasError) {
+        if (message != null) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        } else if (hasError) {
+            Toast.makeText(this, getString(R.string.server_error), Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -4,6 +4,7 @@ package com.dtracker;
 import com.dtracker.core.dagger.PerApp;
 import com.dtracker.core.service.TrackingService;
 import com.dtracker.ui.DistanceActivity;
+import com.dtracker.ui.LocationActivity;
 import com.dtracker.ui.MainActivity;
 import com.dtracker.ui.dialog.ConfirmationDialogFragment;
 
@@ -24,4 +25,6 @@ public interface DTrackerAppComponent {
     void inject(ConfirmationDialogFragment confirmationDialogFragment);
 
     void inject(DistanceActivity distanceActivity);
+
+    void inject(LocationActivity locationActivity);
 }

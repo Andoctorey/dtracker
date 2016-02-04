@@ -27,6 +27,8 @@ public class TrackingService extends BaseService implements LocationListener {
         void onTrackingStatusChanged(boolean isTracking );
 
         void onDistanceChange(float distance);
+
+        void onLocationChanged(Location location);
     }
 
     private static final long MIN_TIME_MS = 10000;
@@ -112,6 +114,9 @@ public class TrackingService extends BaseService implements LocationListener {
             if (trackingListeners!=null&&trackingListeners.size()>0){
                 for (OnTrackingListener trackingListener : trackingListeners) {
                     trackingListener.onDistanceChange(distance);
+                }
+                for (OnTrackingListener trackingListener : trackingListeners) {
+                    trackingListener.onLocationChanged(location);
                 }
             }
         }

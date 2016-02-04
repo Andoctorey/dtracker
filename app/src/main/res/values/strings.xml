@@ -7,4 +7,5 @@
     <string name="start_tracking_warning">Do you agree if your location will be tracked in background?</string>
     <string name="stop_tracking">Stop Tracking</string>
     <string name="distance">Distance</string>
+    <string name="server_error">Problen connecting with server</string>
 </resources>
