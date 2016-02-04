@@ -32,6 +32,7 @@ public class MainActivity extends BaseTrackingServiceActivity implements Trackin
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
+        TrackingService.start(this);
     }
 
     @Override

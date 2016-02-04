@@ -158,7 +158,6 @@ public class TrackingService extends BaseService implements LocationListener {
         return isTracking;
     }
 
-
     public void addOnTrackingListener(OnTrackingListener onTrackingListener) {
         trackingListeners.add(onTrackingListener);
     }
