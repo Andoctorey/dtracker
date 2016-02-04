@@ -2,6 +2,8 @@ package com.dtracker;
 
 
 import com.dtracker.core.dagger.PerApp;
+import com.dtracker.core.service.TrackingService;
+import com.dtracker.ui.MainActivity;
 
 import dagger.Component;
 
@@ -13,4 +15,7 @@ import dagger.Component;
 )
 public interface DTrackerAppComponent {
 
+    void inject(MainActivity mainActivity);
+
+    void inject(TrackingService trackingService);
 }
