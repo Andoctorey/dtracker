@@ -39,6 +39,8 @@ public abstract class BaseTrackingServiceActivity extends BaseActivity {
             TrackingService.LocalBinder binder = (TrackingService.LocalBinder) service;
             trackingService = binder.getService();
             trackingService.addOnTrackingListener(getOnTrackingListener());
+            getOnTrackingListener().onDistanceChange(trackingService.getDistance());
+            getOnTrackingListener().onTrackingStatusChanged(trackingService.isTracking());
             boundToTrackingService = true;
         }
 

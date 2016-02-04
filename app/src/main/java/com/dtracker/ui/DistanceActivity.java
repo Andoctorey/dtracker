@@ -19,7 +19,7 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
     @InjectView(R.id.activity_distance_toolbar)
     Toolbar toolbar;
 
-    @InjectView(R.id.activity_distance_toolbar)
+    @InjectView(R.id.activity_distance_tv_distance)
     TextView tvDistance;
 
     public static void start(Context context) {
@@ -31,16 +31,6 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        displayDistance(trackingService.getDistance());
-    }
-
-    private void displayDistance(float distance) {
-        tvDistance.setText(String.valueOf(distance));
     }
 
     @Override
@@ -65,7 +55,7 @@ public class DistanceActivity extends BaseTrackingServiceActivity implements Tra
 
     @Override
     public void onDistanceChange(float distance) {
-        displayDistance(distance);
+        tvDistance.setText(String.valueOf(distance));
     }
 
     @Override
